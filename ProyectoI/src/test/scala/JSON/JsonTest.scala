@@ -11,7 +11,6 @@ object JsonTest {
     {
       "budget":"150000000",
       "genres":"Action Adventure Science Fiction Thriller",
-      "id":"135397",
       "keywords":"monster dna tyrannosaurus rex velociraptor island",
       "original_title":"Jurassic World",
       "overview":"Twenty-two years after the events of Jurassic Park, Isla Nublar now features a fully functioning dinosaur theme park, Jurassic World, as originally envisioned by John Hammond.",
@@ -21,9 +20,7 @@ object JsonTest {
         "tagline":"The park is open.",
         "title":"Jurassic World",
         "homepage":"http://www.jurassicworld.com/",
-        "vote_average":"6/05/2023",
         "cast":"Chris Pratt Bryce Dallas Howard Irrfan Khan Vincent D'Onofrio Nick Robinson",
-        "vote_count":"8662",
         "director":"Colin Trevorrow"
       }
     }
