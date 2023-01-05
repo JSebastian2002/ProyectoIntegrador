@@ -9,22 +9,17 @@ object JsonTest {
   {
     "JSON":
     {
-      "budget":"150000000",
-      "genres":"Action Adventure Science Fiction Thriller",
-      "id":"135397",
-      "keywords":"monster dna tyrannosaurus rex velociraptor island",
-      "original_title":"Jurassic World",
-      "overview":"Twenty-two years after the events of Jurassic Park, Isla Nublar now features a fully functioning dinosaur theme park, Jurassic World, as originally envisioned by John Hammond.",
-      "production_countries":"iso_3166_1 US name  United States of America",
-      "popularity":
+      "name":"Some Business Name",
+      "preferredUrl":"someurl",
+      "businessPhone":"somenumber",
+      "businessPhone":"somenumber",
+      "retailer":
       {
-        "tagline":"The park is open.",
-        "title":"Jurassic World",
+        "firstName":"Some",
+        "lastName":"One",
         "homepage":"http://www.jurassicworld.com/",
-        "vote_average":"6/05/2023",
-        "cast":"Chris Pratt Bryce Dallas Howard Irrfan Khan Vincent D'Onofrio Nick Robinson",
-        "vote_count":"8662",
-        "director":"Colin Trevorrow"
+        "mobileNo":"someothernumber",
+        "password":"$^^HFKH*"
       }
     }
   }
@@ -32,14 +27,23 @@ object JsonTest {
   def printJson ={
 
     implicit val rltRds = (
-      (__ \ "tagline").read[String] ~
-        (__ \ "title").read[String] ~
+      (__ \ "firstName").read[String] ~
+        (__ \ "lastName").read[String] ~
         (__ \ "homepage").read[String] ~
-        (__ \ "vote_average").read[String] ~
-        (__ \ "cast").read[String] ~
-        (__ \ "vote_count").read[String] ~
-        (__ \ "director").read[String]
+        (__ \ "mobileNo").read[String] ~
+        (__ \ "password").read[String]
       )//(Retailer)
+
+
+
+    implicit val bsnsRds = ({
+      val JSON = (__ \ "business")
+      (JSON \ "name").read[String] ~
+        (JSON \ "preferredUrl").read[String] ~
+        (JSON \ "businessPhone").read[String]
+      //  (business \ "retailer").read[Retailer](rltRds)
+    })//(Business)
+
 
 
     val JSON = Json.parse(jsonValue)//.validate[Business](bsnsRds)
@@ -47,6 +51,9 @@ object JsonTest {
 
     println(JSON)
   }
+
+
+
 
   def main(args: Array[String]): Unit = {
     printJson
