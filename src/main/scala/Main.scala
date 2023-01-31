@@ -1,19 +1,8 @@
 import com.github.tototoshi.csv._
-import play.api.libs.json
-import scala.io.Source
 import java.io.File
 import play.api.libs.json._
-import requests.Response
-import scalikejdbc.{AutoSession, ConnectionPool, DBSession}
 import scala.util.{Failure, Success, Try}
-import scala.util.matching.Regex
-import scalikejdbc._
-import com.cibo.evilplot.plot.{BarChart, PieChart}
-import com.cibo.evilplot.plot.aesthetics.DefaultTheme.{DefaultElements, defaultTheme}
-import com.cibo.evilplot._
-import com.cibo.evilplot.plot._
-import com.cibo.evilplot.plot.aesthetics.DefaultTheme._
-import com.cibo.evilplot.numeric.Point
+
 
 object Main extends App {
 
@@ -46,34 +35,11 @@ object Main extends App {
     println("")
     println("-------------------------------------------------------------")
 
-  val id = data
-    .flatMap(elem => elem.get("id"))
-    .map(_.toInt)
 
-
-  val altoid = id.max
-
-  val bajoid = id.filter(_ != 0).min
-
-  val promedioid = id.sum / id.length
-  val promedioidsin0 = id.sum / id.filter(_ != 0).length
-
-  val idaltopelicula = data.find(elem => elem("id").toInt == altoid)
-  val nombrepeliculaltoid = idaltopelicula.get("title")
-
-
-  println("La id mas alta es: " + altoid)
-  println("La id mas baja es: " + bajoid)
-  println("El promedio contando los 0 es: " + promedioid)
-  println("El promedio sin contar el 0 es: " + promedioidsin0)
-  println("El nombre de la pelicula con el id mas alto es: " + nombrepeliculaltoid)
-  println("")
-  println("-------------------------------------------------------------")
-
-
+/*
   val popularidad = data
     .flatMap(elem => elem.get("popularity"))
-    .map(_.replaceFirst("\\..*", ""))
+    .map(_.replace("\\..*", ""))
     .map(_.toDouble)
 
 
@@ -96,8 +62,7 @@ object Main extends App {
   println("")
   println("-------------------------------------------------------------")
 
-
-
+*/
   val revenue = data
     .flatMap(elem => elem.get("revenue"))
     .map(elemm => Try {
@@ -122,7 +87,7 @@ object Main extends App {
   println("El renevue mas bajo es: " + bajorenevue)
   println("El promedio contando los 0 es: " + promediorene)
   println("El promedio sin contar el 0 es: " + promediorenesin0)
-  println("El nombre de la pelicula con el renevue mas alto es: " +promediorenesin0 )
+  println("El nombre de la pelicula con el renevue mas alto es: " +nombrepeliculaltorene )
   println("")
   println("-------------------------------------------------------------")
 
@@ -186,6 +151,83 @@ object Main extends App {
   println("")
   println("-------------------------------------------------------------")
 
+
+
+
+
+  val original_language = data
+    .flatMap(elem => elem.get("original_language"))
+    .groupBy(identity)
+    .map {
+      case (keyword,lista) => (keyword, lista.size)
+    }
+    .toList
+    .sortBy(_._2)
+    .reverse
+
+println(original_language)
+
+  val original_title = data
+    .flatMap(elem => elem.get("original_title"))
+    .groupBy(identity)
+    .map {
+      case (keyword, lista) => (keyword, lista.size)
+    }
+    .toList
+    .sortBy(_._2)
+    .reverse
+
+
+  val overview = data
+    .flatMap(elem => elem.get("overview"))
+    .groupBy(identity)
+    .map {
+      case (keyword, lista) => (keyword, lista.size)
+    }
+    .toList
+    .sortBy(_._2)
+    .reverse
+
+
+
+  val status = data
+    .flatMap(elem => elem.get("status"))
+    .groupBy(identity)
+    .map {
+      case (keyword, lista) => (keyword, lista.size)
+    }
+    .toList
+    .sortBy(_._2)
+    .reverse
+
+  println(status)
+
+
+  val director = data
+    .flatMap(elem => elem.get("director"))
+    .groupBy(identity)
+    .map {
+      case (keyword, lista) => (keyword, lista.size)
+    }
+    .toList
+    .sortBy(_._2)
+    .reverse
+
+  println(director)
+
+
+  val productionCountries = data
+    .flatMap(row => row.get("production_countries"))
+    .map(row => Json.parse(row))
+    .flatMap(jsonData => jsonData \\ "name")
+    .map(jsValue => jsValue.as[String])
+    .groupBy(identity)
+    .map { case (keyword, lista) => (keyword, lista.size) }
+    .toList
+    .sortBy(_._2)
+    .reverse
+
+println(productionCountries)
 
 }
 
