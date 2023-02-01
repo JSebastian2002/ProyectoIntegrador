@@ -211,6 +211,7 @@ object Main extends App {
   println("El promedio de conteo votos   de las peliculas es: " + avgvotecount)
 
 
+<<<<<<< HEAD
   val original_language = data
     .flatMap(elem => elem.get("original_language"))
     .groupBy(identity)
@@ -320,6 +321,8 @@ object Main extends App {
 
 
 
+=======
+>>>>>>> 39c58680d2d6986ce1ca3823e6e2c025ccd0106a
 }
 
 
