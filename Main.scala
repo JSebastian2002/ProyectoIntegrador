@@ -1,6 +1,5 @@
 import com.github.tototoshi.csv._
 import java.io.File
-import play.api.libs.json._
 import scala.util.{Failure, Success, Try}
 
 
@@ -110,6 +109,106 @@ object Main extends App {
   println("Los ingresos  mas bajos es: " + minrevenue + " \nPelicula: " + titlerevemin)
   println("")
   println("El promedio de los ingresos  de las peliculas es: " + avgpopu)
+
+
+  val runtime = data
+    .map(elem => (elem("runtime"), elem(("title"))))
+    .map(elem => Try {
+      (elem._1.toDouble, elem._2)
+    })
+    .filter(f => f.isSuccess)
+    .map(_.get)
+
+
+  val maxruntime = runtime.map(_._1).max
+  val minruntime = runtime.map(_._1).filter(_ != 0).min
+  val sumruntime = runtime.map(_._1).sum
+  val lenruntime = runtime.map(_._1).length
+  val avgruntime = sumruntime / lenruntime
+
+  val titlemaxrun = runtime
+    .filter(elem => elem._1 == maxruntime)
+    .map(_._2)
+    .head
+
+  val titleminrun = runtime
+    .filter(elem => elem._1 == minruntime)
+    .map(_._2)
+    .head
+
+  println("---------------------------------------------------")
+  println("Runtime")
+  println("El tiempo de ejecución mas alto es: " + maxruntime + " \nPelicula: " + titlemaxrun)
+  println("")
+  println("El tiempo de ejecución mas bajo es: " + minrevenue + " \nPelicula: " + titleminrun)
+  println("")
+  println("El promedio del tiempo de ejecución  de las peliculas es: " + avgruntime)
+
+
+  val voteaverage = data
+    .map(elem => (elem("vote_average"), elem(("title"))))
+    .map(elem => Try {
+      (elem._1.toDouble, elem._2)
+    })
+    .filter(f => f.isSuccess)
+    .map(_.get)
+
+
+  val maxvoteaverage = voteaverage.map(_._1).max
+  val minvoteaverage = voteaverage.map(_._1).filter(_ != 0).min
+  val sumvoteaverage = voteaverage.map(_._1).sum
+  val lenvoteaverage = voteaverage.map(_._1).length
+  val avgvoteaverage = sumvoteaverage / lenvoteaverage
+
+  val titlemaxvoteavg = voteaverage
+    .filter(elem => elem._1 == maxvoteaverage)
+    .map(_._2)
+    .head
+
+  val titleminvoteavg = voteaverage
+    .filter(elem => elem._1 == minvoteaverage)
+    .map(_._2)
+    .head
+  println("---------------------------------------------------")
+  println("Voteaverage")
+  println("El promedio de votos mas alto es: " + maxvoteaverage + " \nPelicula: " + titlemaxvoteavg)
+  println("")
+  println("El promedio de votos mas bajo es: " + minvoteaverage + " \nPelicula: " + titleminvoteavg)
+  println("")
+  println("El promedio de votos   de las peliculas es: " + avgvoteaverage)
+
+
+  val votecount = data
+    .map(elem => (elem("vote_count"), elem(("title"))))
+    .map(elem => Try {
+      (elem._1.toInt, elem._2)
+    })
+    .filter(f => f.isSuccess)
+    .map(_.get)
+
+
+  val maxvotecount = votecount.map(_._1).max
+  val minvotecount = votecount.map(_._1).filter(_ != 0).min
+  val sumvotecount = votecount.map(_._1).sum
+  val lenvotecount = votecount.map(_._1).length
+  val avgvotecount = sumvotecount / lenvotecount
+
+  val titlemaxvotecount = votecount
+    .filter(elem => elem._1 == maxvotecount)
+    .map(_._2)
+    .head
+
+  val titleminvotecount = votecount
+    .filter(elem => elem._1 == minvotecount)
+    .map(_._2)
+    .head
+  println("---------------------------------------------------")
+  println("Votecount")
+  println("El conteo de votos mas alto es: " + maxvotecount + " \nPelicula: " + titlemaxvotecount)
+  println("")
+  println("El conteo de votos mas bajo es: " + minvoteaverage + " \nPelicula: " + titleminvotecount)
+  println("")
+  println("El promedio de conteo votos   de las peliculas es: " + avgvotecount)
 
 
 }
