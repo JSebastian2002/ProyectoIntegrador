@@ -1,13 +1,9 @@
 import com.github.tototoshi.csv._
 import java.io.File
 import scala.util.{Failure, Success, Try}
-import play.api.libs.json._
-import com.cibo.evilplot.plot.{BarChart, PieChart}
-import com.cibo.evilplot.plot.aesthetics.DefaultTheme.{DefaultElements, defaultTheme}
-import com.cibo.evilplot._
-import com.cibo.evilplot.plot._
-import com.cibo.evilplot.plot.aesthetics.DefaultTheme._
-import com.cibo.evilplot.numeric.Point
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
 object Main extends App {
 
   val reader = CSVReader.open(new File("C:\\Users\\agrab\\Downloads\\archivo csv/movie_dataset.csv"))
@@ -19,7 +15,7 @@ object Main extends App {
     .map(elem => (elem("budget"), elem(("title")), elem(("original_language")),
       elem(("tagline")), elem(("director")), elem(("status"))))
     .map(elem => Try {
-      (elem._1.toInt, elem._2, elem._3, elem._4, elem._5, elem._6)
+      (elem._1.toLong, elem._2, elem._3, elem._4, elem._5, elem._6)
     })
     .filter(f => f.isSuccess)
     .map(_.get)
@@ -29,7 +25,6 @@ object Main extends App {
   val sumpre = presupuesto.map(_._1).sum
   val lenpre = presupuesto.map(_._1).length
   val avgpre = sumpre / lenpre
-
 
 
   val titlepremax = presupuesto
@@ -82,51 +77,24 @@ object Main extends App {
     .head
 
 
-
-
   println("Budget")
-  println("El presupuesto mas alto es: "+maxpre+" \nPelicula: "+titlepremax+"" +
-    "\nIdioma: "+olangpremax+"\nEslogan: "+tagpremax+"\nDirector: "+direpremax+"\nEstado: "+statpremax)
+  println("El presupuesto mas alto es: " + maxpre + " \nPelicula: " + titlepremax + "" +
+    "\nIdioma: " + olangpremax + "\nEslogan: " + tagpremax + "\nDirector: " + direpremax + "\nEstado: " + statpremax)
   println("")
 
-  println("El presupuesto mas bajo es: "+minpre+" \nPelicula: "+titlepremin + "" +
-    "\nIdioma: " + olangpremin  + "\nEslogan: " + tagpremin  + "\nDirector: "
-    + direpremin  + "\nEstado: " + statpremin )
+  println("El presupuesto mas bajo es: " + minpre + " \nPelicula: " + titlepremin + "" +
+    "\nIdioma: " + olangpremin + "\nEslogan: " + tagpremin + "\nDirector: "
+    + direpremin + "\nEstado: " + statpremin)
   println("")
 
-  println("El promedio del presupuesto de las peliculas es: "+avgpre)
-
-val presupuesto2 = data
-  .map(elem => (elem("budget"),elem("title")))
-  .map(elem => Try {
-    (elem._1.toInt, elem._2)
-  })
-  .filter(f => f.isSuccess)
-  .map(_.get)
-  .groupBy(identity)
-  .map { case (keyword, title) => (keyword, title.size ) }
-  .toList
-  .sortBy(_._2)
-  .reverse
-  val a = presupuesto2.map(_._2).map(_.toDouble).take(5)
-  val b = presupuesto2.map(_._1).map(_.toString).take((5))
-
-  BarChart(a)
-    .title("Presupuesto de Peliculas")
-    .xAxis(b)
-    .yAxis()
-    .frame()
-    .yLabel("Peliculas")
-    .bottomLegend()
-    .render()
-    .write(new File("C:\\Users\\agrab\\Documents\\presupuesto1.png"))
+  println("El promedio del presupuesto de las peliculas es: " + avgpre)
 
 
   val popularidad = data
-    .map(elem => (elem("popularity"), elem(("title")) ,elem(("original_language")),
+    .map(elem => (elem("popularity"), elem(("title")), elem(("original_language")),
       elem(("tagline")), elem(("director")), elem(("status"))))
-    .map(elem => Try{
-      (elem._1.replace(".", "").toLong , elem._2, elem._3, elem._4, elem._5, elem._6)
+    .map(elem => Try {
+      (elem._1.replace(".", "").toLong, elem._2, elem._3, elem._4, elem._5, elem._6)
     })
     .filter(f => f.isSuccess)
     .map(_.get)
@@ -212,18 +180,18 @@ val presupuesto2 = data
     .map(_.get)
 
 
-  val maxrevenue =  revenue.map(_._1).max
-  val minrevenue =  revenue.map(_._1).filter(_ != 0).min
-  val sumrevenue =  revenue.map(_._1).sum
-  val lenrevenue =  revenue.map(_._1).length
+  val maxrevenue = revenue.map(_._1).max
+  val minrevenue = revenue.map(_._1).filter(_ != 0).min
+  val sumrevenue = revenue.map(_._1).sum
+  val lenrevenue = revenue.map(_._1).length
   val avgrevenue = sumrevenue / lenrevenue
 
-  val titlerevemax =  revenue
+  val titlerevemax = revenue
     .filter(elem => elem._1 == maxrevenue)
     .map(_._2)
     .head
 
-  val titlerevemin =  revenue
+  val titlerevemin = revenue
     .filter(elem => elem._1 == minrevenue)
     .map(_._2)
     .head
@@ -271,8 +239,8 @@ val presupuesto2 = data
   println("---------------------------------------------------")
   println("Revenue")
   println("Los ingresos  mas altos es: " + maxrevenue + " \nPelicula: " + titlerevemax + "" +
-    "\nIdioma: " + olangrevemax  + "\nEslogan: " + tagrevemax  + "\nDirector: " + direrevemax  +
-    "\nEstado: " + statrevemax )
+    "\nIdioma: " + olangrevemax + "\nEslogan: " + tagrevemax + "\nDirector: " + direrevemax +
+    "\nEstado: " + statrevemax)
   println("")
   println("Los ingresos  mas bajos es: " + minrevenue + " \nPelicula: " + titlerevemin + "" +
     "\nIdioma: " + olangrevemin + "\nEslogan: " + tagrevemin + "\nDirector: " + direrevemin +
@@ -285,7 +253,7 @@ val presupuesto2 = data
     .map(elem => (elem("runtime"), elem(("title")), elem(("original_language")),
       elem(("tagline")), elem(("director")), elem(("status"))))
     .map(elem => Try {
-      (elem._1.toDouble, elem._2 , elem._3, elem._4, elem._5, elem._6)
+      (elem._1.toDouble, elem._2, elem._3, elem._4, elem._5, elem._6)
     })
     .filter(f => f.isSuccess)
     .map(_.get)
@@ -502,7 +470,6 @@ val presupuesto2 = data
     .head
 
 
-
   println("---------------------------------------------------")
   println("Votecount")
   println("El conteo de votos mas alto es: " + maxvotecount + " \nPelicula: " + titlemaxvotecount + "" +
@@ -514,117 +481,25 @@ val presupuesto2 = data
     "\nEstado: " + statminvotecoun)
   println("")
   println("El promedio de conteo votos   de las peliculas es: " + avgvotecount)
-println("-----------------------------------------------------------------")
-
-  val original_language = data
-    .flatMap(elem => elem.get("original_language"))
-    .groupBy(identity)
-    .map {
-      case (keyword,lista) => (keyword, lista.size)
-    }
-    .toList
-    .sortBy(_._2)
-    .reverse
+  println("-----------------------------------------------------------------")
 
 
-
-  println(original_language)
-/*
-  val original_title = data
-    .flatMap(elem => elem.get("original_title"))
-    .groupBy(identity)
-    .map {
-      case (keyword, lista) => (keyword, lista.size)
-    }
-    .toList
-    .sortBy(_._2)
-    .reverse
+  val dateFormatter = DateTimeFormatter.ofPattern(("yyyy-MM-dd"))
+  val releaseDateList = data
+    .map(row => row("release_date"))
+    .filter(!_.equals(""))
+    .map(text => LocalDate.parse(text, dateFormatter))
 
 
-  val overview = data
-    .flatMap(elem => elem.get("overview"))
-    .groupBy(identity)
-    .map {
-      case (keyword, lista) => (keyword, lista.size)
-    }
-    .toList
-    .sortBy(_._2)
-    .reverse
-
-
-
-  val status = data
-    .flatMap(elem => elem.get("status"))
-    .groupBy(identity)
-    .map {
-      case (keyword, lista) => (keyword, lista.size)
-    }
-    .toList
-    .sortBy(_._2)
-    .reverse
-
-  println(status)
-
-
-  val director = data
-    .flatMap(elem => elem.get("director"))
-    .groupBy(identity)
-    .map {
-      case (keyword, lista) => (keyword, lista.size)
-    }
-    .toList
-    .sortBy(_._2)
-    .reverse
-
-  println(director)
-
-
-  val productionCountries = data
-    .flatMap(row => row.get("production_countries"))
-    .map(row => Json.parse(row))
-    .flatMap(jsonData => jsonData \\ "name")
-    .map(jsValue => jsValue.as[String])
+  val yearReleaseList = releaseDateList
+    .map(_.getYear)
     .groupBy(identity)
     .map { case (keyword, lista) => (keyword, lista.size) }
     .toList
     .sortBy(_._2)
     .reverse
 
-  println(productionCountries)
-
-
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  println("Años que mas peliculas se han lanzado: " +yearReleaseList)
 
 
 }
