@@ -8,7 +8,7 @@ import scala.util.{Failure, Success, Try}
 
 object Graficos extends App {
 
-  //  implicit val theme = DefaultTheme.copy(elements = DefaultElements.copy(categoricalXAxisLabelOrientation = 45))
+  // implicit val theme = DefaultTheme.copy(elements = DefaultElements.copy(categoricalXAxisLabelOrientation = 45))
   val reader = CSVReader.open(new File("C:\\Users\\agrab\\Downloads\\archivo csv/movie_dataset.csv"))
   val data = reader.allWithHeaders()
   reader.close()
