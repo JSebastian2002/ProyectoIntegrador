@@ -6,7 +6,7 @@ import scalikejdbc._
 
 
 object PoblarBase extends App {
-
+//Modelo Relacional
 
 
 

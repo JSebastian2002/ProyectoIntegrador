@@ -65,21 +65,4 @@ object Crew  extends App{
 
 
 
-
-  def actorsNames(dataRaw: String): Option[String] = {
-    val response: Response = requests
-      .post("http://api.meaningcloud.com/topics-2.0",
-        data = Map("key" -> "a1e3dd531085b28b1ecccff737ad5b6c",
-          "lang" -> "en",
-          "txt" -> dataRaw,
-          "tt" -> "e"),
-        headers = Map("content-type" -> "application/x-www-form-urlencoded"))
-    Thread.sleep(1000)
-    if (response.statusCode == 200) {
-      Option(response.text)
-    } else
-      Option.empty
-  }
-
-
 }
