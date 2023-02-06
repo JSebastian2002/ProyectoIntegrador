@@ -44,7 +44,7 @@ object Crew  extends App{
     }
     txtOr
   }
-
+/*
   val crew = data
     .map(row => row("crew"))
     .map(replacePattern2)
@@ -61,7 +61,7 @@ object Crew  extends App{
     .flatMap(json => json("entity_list").as[JsArray].value)
     .map(_ ("form"))
     .map(data => data.as[String])
-
+*/
 
 
 
