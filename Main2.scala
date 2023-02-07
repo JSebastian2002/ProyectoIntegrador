@@ -2,7 +2,6 @@ import com.cibo.evilplot.plot.aesthetics.DefaultTheme.{DefaultElements, DefaultT
 import com.cibo.evilplot.plot._
 import com.github.tototoshi.csv._
 import java.io.File
-import scala.util.{Failure, Success, Try}
 import play.api.libs.json._
 
 object Main2 extends App {
@@ -11,25 +10,22 @@ object Main2 extends App {
   reader.close()
   implicit val theme = DefaultTheme.copy(elements = DefaultElements.copy(categoricalXAxisLabelOrientation = 45))
 
-
-  println("        ")
-
-
   //Frecuencia
+
   val original_language = data
     .flatMap(elem => elem.get("original_language"))
     .groupBy(identity)
-    .map { case (keyword, lista) => (keyword, lista.size.toDouble) }
+    .map { case (keyword, lista) => (keyword, lista.size) }
     .toList
     .sortBy(_._2)
     .reverse
 
-
-
   println(original_language)
-//Diagrama Pastel
+
+  //Diagrama Pastel
 
   val olpastel = original_language
+    .map(m => (m._1, m._2.toDouble))
     .take(10)
 
   PieChart(olpastel)
@@ -37,9 +33,8 @@ object Main2 extends App {
     .render()
     .write(new File("C:\\Users\\agrab\\Documents\\Diagrama Pastel/pastelorilan.png"))
 
+  //Frecuencia
 
-
-//Frecuencia
   val keywords = data
     .flatMap(elem => elem.get("keywords"))
     .flatMap(elem => elem.split("\\s"))
@@ -52,47 +47,80 @@ object Main2 extends App {
     .sortBy(_._2)
     .reverse
 
-
   println(keywords)
 
+  //Diagrama de Barras
+
+  val keywordsvalue = keywords
+    .take(10)
+    .map(_._2)
+    .map(_.toDouble)
 
 
+  val keywordslabel = keywords
+    .take(10)
+    .map(_._1)
+
+
+  BarChart(keywordsvalue)
+    .title("Palabras Clave ")
+    .xAxis(keywordslabel)
+    .yAxis()
+    .frame()
+    .yLabel("Frecuencia")
+    .bottomLegend()
+    .render()
+    .write(new File("C:\\Users\\agrab\\Documents\\Diagrama Barras/keywords.png"))
 
 
   println(" ")
+
+  //Frecuencia
+
   val genres = data
     .flatMap(elem => elem.get("genres"))
     .flatMap(elem => elem.split("\\s"))
-    .map(genre => {
-      if (genre == "Science" || genre == "Fiction") {
-        "Science Fiction"
-
-      }.distinct else {
-        genre
-      }
-    })
+    .map {
+      case "Science" => "Science Fiction"
+      case "Fiction" => null
+      case x => x
+    }
+    .filter(f => f != null)
     .groupBy(identity)
     .map { case (keyword, lista) => (keyword, lista.size) }
     .toList
     .sortBy(_._2)
     .reverse
 
+  println(genres)
 
-println(genres)
+  //Diagrama de Barras
 
+  val genresvalue = genres
+    .take(10)
+    .map(_._2)
+    .map(_.toDouble)
+
+
+  val genreslabel = genres
+    .take(10)
+    .map(_._1)
+
+
+
+  BarChart(genresvalue)
+    .title("Palabras Clave ")
+    .xAxis(genreslabel)
+    .yAxis()
+    .frame()
+    .yLabel("Frecuencia")
+    .bottomLegend()
+    .render()
+    .write(new File("C:\\Users\\agrab\\Documents\\Diagrama Barras/genres.png"))
 
   println(" ")
-  val overview = data.take(2)
-    .map(elem => (elem("homepage"), elem(("overview"))))
-    .map(elem => Try {
-      (elem._2, elem._1.toString)
-    })
-    .filter(f => f.isSuccess)
-    .map(_.get)
 
-  println(overview)
-
-
+  //Frecuencia
   val productionCompanies = data
     .flatMap(row => row.get("production_companies"))
     .map(row => Json.parse(row))
@@ -103,7 +131,10 @@ println(genres)
     .toList
     .sortBy(_._2)
     .reverse
+    .take(10)
 
+  println(productionCompanies)
+  //Diagrama de Barras
   val productioncompaniesvalue = productionCompanies
     .map(_._2)
     .map(_.toDouble)
@@ -124,10 +155,7 @@ println(genres)
     .render()
     .write(new File("C:\\Users\\agrab\\Documents\\Diagrama Barras/proudctioncompanies.png"))
 
-
-  //println(productionCompanies)
-
-
+  //Frecuencia
   val productionCountries = data
     .flatMap(row => row.get("production_countries"))
     .map(row => Json.parse(row))
@@ -138,7 +166,9 @@ println(genres)
     .toList
     .sortBy(_._2)
     .reverse
-
+    .take(10)
+  println(productionCountries)
+  //Diagrama de Barras
   val productioncontriesvalue = productionCountries
     .map(_._2)
     .map(_.toDouble)
@@ -160,20 +190,18 @@ println(genres)
     .write(new File("C:\\Users\\agrab\\Documents\\Diagrama Barras/proudctioncontries.png"))
 
 
-  // println(productionCountries)
-
   val spokenlanguages = data
     .flatMap(row => row.get("spoken_languages"))
     .map(row => Json.parse(row))
     .flatMap(jsonData => jsonData \\ "name")
-    //.map(StringContext.processEscapes)
     .map(jsValue => jsValue.as[String])
     .groupBy(identity)
     .map { case (keyword, lista) => (keyword, lista.size) }
     .toList
     .sortBy(_._2)
     .reverse
-
+    .take(10)
+  println(spokenlanguages)
   val spokenlanguagesvalue = spokenlanguages
     .take(10)
     .map(_._2)
@@ -194,7 +222,33 @@ println(genres)
     .render()
     .write(new File("C:\\Users\\agrab\\Documents\\Diagrama Barras/spokenlanguages.png"))
 
-  //println(spokenlanguages)
+
+  //Frecuencia
+  val directors = data
+    .flatMap(elem => elem.get("director"))
+    .flatMap(elem => elem.split("\\s"))
+    .filter(f => f.trim.nonEmpty)
+    .groupBy(identity)
+    .map { case (keyword, lista) => (keyword, lista.size) }
+    .toList
+    .sortBy(_._2)
+    .reverse
+    .take(10)
+
+  println(directors)
+
+
+
+  //Diagrama Pastel
+
+  val directorspastel = directors
+    .map(m => (m._1, m._2.toDouble))
+    .take(10)
+
+  PieChart(directorspastel)
+    .title("Directores")
+    .render()
+    .write(new File("C:\\Users\\agrab\\Documents\\Diagrama Pastel/directorespastel.png"))
 
 
 }
