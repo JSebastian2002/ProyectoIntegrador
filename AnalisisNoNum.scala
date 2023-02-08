@@ -22,16 +22,30 @@ object AnalisisNoNum extends App {
 
   println(original_language)
 
-  //Diagrama Pastel
 
-  val olpastel = original_language
-    .map(m => (m._1, m._2.toDouble))
+  //Diagrama de Barras
+
+  val originallanvalue = original_language
     .take(10)
+    .map(_._2)
+    .map(_.toDouble)
 
-  PieChart(olpastel)
-    .title("idiomas Originales")
+
+  val originallanlabel = original_language
+    .take(10)
+    .map(_._1)
+
+
+  BarChart(originallanvalue)
+    .title("Top 10 Idiomas Originales  ")
+    .xAxis(originallanlabel)
+    .yAxis()
+    .frame()
+    .yLabel("Frecuencia")
+    .bottomLegend()
     .render()
-    .write(new File("C:\\Users\\agrab\\Documents\\Diagrama Pastel/pastelorilan.png"))
+    .write(new File("C:\\Users\\agrab\\Documents\\Diagrama Barras/originallan.png"))
+
 
   //Frecuencia
 

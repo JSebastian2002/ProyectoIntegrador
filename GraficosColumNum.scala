@@ -274,4 +274,5 @@ object GraficosColumNum extends App {
     .render()
     .write(new File("C:\\Users\\agrab\\Documents\\Diagrama Barras/votecountop10.png"))
 
+
 }
