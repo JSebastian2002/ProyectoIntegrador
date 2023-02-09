@@ -167,7 +167,7 @@ object GraficosColumTexto extends App {
     .write(new File("C:\\Users\\agrab\\Documents\\Diagrama Barras/taglinessyn.png"))
 
 
-  //Directo Some/None
+  //Director Some/None
 
   val directorv = data
     .map(row => row("director"))
@@ -190,7 +190,7 @@ object GraficosColumTexto extends App {
     .map(_.toString)
 
   BarChart(valuedirector)
-    .title(" Keywords Some/None ")
+    .title(" Director Some/None ")
     .xAxis(labeldirector)
     .yAxis()
     .frame()

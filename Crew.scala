@@ -15,7 +15,7 @@ object Crew extends App {
   val data = reader.allWithHeaders()
   reader.close()
 
-
+            //Limpieza
   def replacePattern(original: String): String = {
     var txtOr = original
     val pattern: Regex = "(\\s\"(.*?)\",)".r
@@ -60,6 +60,7 @@ object Crew extends App {
     .map(text => Try(Json.parse(text)))
     .filter(_.isSuccess)
 
+     //Frecuencia department
   val departmentall = crew
     .map(_.get)
     .flatMap(_.as[JsArray].value)
@@ -75,6 +76,7 @@ object Crew extends App {
 
   println(departmentall)
 
+  //Frecuencia Jobs
   val jobsall = crew
     .map(_.get)
     .flatMap(_.as[JsArray].value)

@@ -13,7 +13,6 @@ object GraficosColumNum extends App {
 
   //Budget
    //None y Some
-
   val budgetnys = data
     .map(elem => elem("budget"))
     .map(_.toInt)
@@ -99,6 +98,7 @@ object GraficosColumNum extends App {
     .map(_._2)
     .take(10)
 
+//Diagrama de Barras
 
   BarChart(popuvalor)
     .title("Top 10 peliculas con mas popularidad ")

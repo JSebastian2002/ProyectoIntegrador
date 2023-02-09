@@ -10,7 +10,7 @@ object AnalisisNoNum extends App {
   reader.close()
   implicit val theme = DefaultTheme.copy(elements = DefaultElements.copy(categoricalXAxisLabelOrientation = 45))
 
-  //Frecuencia
+  //Frecuencia original_language
 
   val original_language = data
     .flatMap(elem => elem.get("original_language"))
@@ -23,7 +23,7 @@ object AnalisisNoNum extends App {
   println(original_language)
 
 
-  //Diagrama de Barras
+  //Diagrama de Barras original_language
 
   val originallanvalue = original_language
     .take(10)
@@ -47,7 +47,7 @@ object AnalisisNoNum extends App {
     .write(new File("C:\\Users\\agrab\\Documents\\Diagrama Barras/originallan.png"))
 
 
-  //Frecuencia
+  //Frecuencia keywords
 
   val keywords = data
     .flatMap(elem => elem.get("keywords"))
@@ -63,7 +63,7 @@ object AnalisisNoNum extends App {
 
   println(keywords)
 
-  //Diagrama de Barras
+  //Diagrama de Barras keywords
 
   val keywordsvalue = keywords
     .take(10)
@@ -89,7 +89,7 @@ object AnalisisNoNum extends App {
 
   println(" ")
 
-  //Frecuencia
+  //Frecuencia genres
 
   val genres = data
     .flatMap(elem => elem.get("genres"))
@@ -108,7 +108,7 @@ object AnalisisNoNum extends App {
 
   println(genres)
 
-  //Diagrama de Barras
+  //Diagrama de Barras genres
 
   val genresvalue = genres
     .take(10)
@@ -119,7 +119,6 @@ object AnalisisNoNum extends App {
   val genreslabel = genres
     .take(10)
     .map(_._1)
-
 
 
   BarChart(genresvalue)
@@ -134,7 +133,8 @@ object AnalisisNoNum extends App {
 
   println(" ")
 
-  //Frecuencia
+  //Frecuencia productioncompanies
+
   val productionCompanies = data
     .flatMap(row => row.get("production_companies"))
     .map(row => Json.parse(row))
@@ -148,7 +148,9 @@ object AnalisisNoNum extends App {
     .take(10)
 
   println(productionCompanies)
-  //Diagrama de Barras
+
+  //Diagrama de Barras productioncompanies
+
   val productioncompaniesvalue = productionCompanies
     .map(_._2)
     .map(_.toDouble)
@@ -169,7 +171,8 @@ object AnalisisNoNum extends App {
     .render()
     .write(new File("C:\\Users\\agrab\\Documents\\Diagrama Barras/proudctioncompanies.png"))
 
-  //Frecuencia
+  //Frecuencia productioncountries
+
   val productionCountries = data
     .flatMap(row => row.get("production_countries"))
     .map(row => Json.parse(row))
@@ -182,7 +185,9 @@ object AnalisisNoNum extends App {
     .reverse
     .take(10)
   println(productionCountries)
-  //Diagrama de Barras
+
+  //Diagrama de Barras productioncountries
+
   val productioncontriesvalue = productionCountries
     .map(_._2)
     .map(_.toDouble)
@@ -203,7 +208,7 @@ object AnalisisNoNum extends App {
     .render()
     .write(new File("C:\\Users\\agrab\\Documents\\Diagrama Barras/proudctioncontries.png"))
 
-
+  //Frecuencia spoken_languages
   val spokenlanguages = data
     .flatMap(row => row.get("spoken_languages"))
     .map(row => Json.parse(row))
@@ -216,6 +221,9 @@ object AnalisisNoNum extends App {
     .reverse
     .take(10)
   println(spokenlanguages)
+
+  //Diagrama de Barras spokenlanguages
+
   val spokenlanguagesvalue = spokenlanguages
     .take(10)
     .map(_._2)
@@ -237,7 +245,8 @@ object AnalisisNoNum extends App {
     .write(new File("C:\\Users\\agrab\\Documents\\Diagrama Barras/spokenlanguages.png"))
 
 
-  //Frecuencia
+  //Frecuencia director
+
   val directors = data
     .flatMap(elem => elem.get("director"))
     .filter(f => f.trim.nonEmpty)
@@ -250,10 +259,7 @@ object AnalisisNoNum extends App {
 
   println(directors)
 
-
-
-  //Diagrama de Barras
-
+  //Diagrama de Barras director
 
   val directorsvalue = directors
     .take(10)
@@ -265,9 +271,6 @@ object AnalisisNoNum extends App {
     .take(10)
     .map(_._1)
 
-
-
-
   BarChart(directorsvalue)
     .title("Directores con mas peliculas")
     .xAxis(directorslabel)
@@ -277,6 +280,5 @@ object AnalisisNoNum extends App {
     .bottomLegend()
     .render()
     .write(new File("C:\\Users\\agrab\\Documents\\Diagrama Barras/directores.png"))
-
 
 }

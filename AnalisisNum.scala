@@ -10,7 +10,7 @@ object AnalisisNum extends App {
   val data = reader.allWithHeaders()
   reader.close()
 
-
+   //Columna Budget
   val presupuesto = data
     .map(elem => (elem("budget"), elem(("title")), elem(("original_language")),
       elem(("tagline")), elem(("director")), elem(("status"))))
@@ -89,7 +89,7 @@ object AnalisisNum extends App {
 
   println("El promedio del presupuesto de las peliculas es: " + avgpre)
 
-
+   //Columna Popularity
   val popularidad = data
     .map(elem => (elem("popularity"), elem(("title")), elem(("original_language")),
       elem(("tagline")), elem(("director")), elem(("status"))))
@@ -169,7 +169,7 @@ object AnalisisNum extends App {
 
   println("El promedio de la popularidad de las peliculas es: " + avgpopu)
 
-
+    //Columna revenue
   val revenue = data
     .map(elem => (elem("revenue"), elem(("title")), elem(("original_language")),
       elem(("tagline")), elem(("director")), elem(("status"))))
@@ -204,7 +204,6 @@ object AnalisisNum extends App {
     .filter(elem => elem._1 == minrevenue)
     .map(_._3)
     .head
-
 
   val tagrevemax = revenue
     .filter(elem => elem._1 == maxrevenue)
@@ -248,7 +247,7 @@ object AnalisisNum extends App {
   println("")
   println("El promedio de los ingresos  de las peliculas es: " + avgrevenue)
 
-
+     //Columna Runtime
   val runtime = data
     .map(elem => (elem("runtime"), elem(("title")), elem(("original_language")),
       elem(("tagline")), elem(("director")), elem(("status"))))
@@ -257,7 +256,6 @@ object AnalisisNum extends App {
     })
     .filter(f => f.isSuccess)
     .map(_.get)
-
 
   val maxruntime = runtime.map(_._1).max
   val minruntime = runtime.map(_._1).filter(_ != 0).min
@@ -326,7 +324,7 @@ object AnalisisNum extends App {
   println("")
   println("El promedio del tiempo de ejecución  de las peliculas es: " + avgruntime)
 
-
+       //Columna Vote_average
   val voteaverage = data
     .map(elem => (elem("vote_average"), elem(("title")), elem(("original_language")),
       elem(("tagline")), elem(("director")), elem(("status"))))
@@ -404,7 +402,7 @@ object AnalisisNum extends App {
   println("")
   println("El promedio de votos   de las peliculas es: " + avgvoteaverage)
 
-
+      //Columna Votecount
   val votecount = data
     .map(elem => (elem("vote_count"), elem(("title")), elem(("original_language")),
       elem(("tagline")), elem(("director")), elem(("status"))))
@@ -483,7 +481,7 @@ object AnalisisNum extends App {
   println("El promedio de conteo votos   de las peliculas es: " + avgvotecount)
   println("-----------------------------------------------------------------")
 
-
+       //Columna release_date
   val dateFormatter = DateTimeFormatter.ofPattern(("yyyy-MM-dd"))
   val releaseDateList = data
     .map(row => row("release_date"))
@@ -499,8 +497,7 @@ object AnalisisNum extends App {
     .sortBy(_._2)
     .reverse
 
-  println("Años que mas peliculas se han lanzado: " +yearReleaseList)
-
+  println("Años que mas peliculas se han lanzado: " + yearReleaseList)
 
 }
 
