@@ -1,10 +1,14 @@
 import com.github.tototoshi.csv._
+import io.circe.JsonObject
+
 import java.io.File
 import play.api.libs.json._
 import requests.Response
 import scalikejdbc.{AutoSession, ConnectionPool, DBSession}
+
 import scala.util.{Failure, Success, Try}
 import scalikejdbc._
+
 import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Paths, StandardOpenOption}
 import scala.util.matching.Regex
@@ -35,7 +39,7 @@ object PoblarBase extends App {
   Class.forName("com.mysql.cj.jdbc.Driver")
   ConnectionPool.singleton("jdbc:mysql://localhost:3306/pfr", "root", "admin")
   implicit val session: DBSession = AutoSession
-
+/*
   //Poblar mediante SCRIPT
   //Tabla director
   case class Directorm(director: String)
@@ -143,7 +147,7 @@ object PoblarBase extends App {
   )
 
 
-  // POBLAR MEDIANTE LIBRERIA
+    // POBLAR MEDIANTE LIBRERIA
   // Tabla productioncompanies
   val productionCompdata = data
     .flatMap(elem => elem.get("production_companies"))
@@ -196,6 +200,83 @@ object PoblarBase extends App {
       .stripMargin
       .update
       .apply())
+*/
+     //Tabla Relacion: ProduCom_Peli
+/*
+  val ProduComPeli = data
+    .map(row => (row("id"), Json.parse(row("production_companies"))))
+    .map(row => (row._1, (row._2 \\ "id").toList))
+    .flatMap(x => x._2.map((x._1, _)))
+    .map(x => (x._1.toInt, x._2.toString().toInt))
+
+   ProduComPeli.foreach(x =>
+    sql"""
+             INSERT INTO producom_peli(id_p2, id_pcp1)
+             VALUES
+             (${x._1}, ${x._2})
+             """.stripMargin
+      .update
+      .apply())
+
+*/
+   //Tabla SpokenlanguagesxPeli
+/*
+  val spokenlandata = data
+    .map(elem => (elem("id"),Json.parse(elem("spoken_languages")),Json.parse(elem("spoken_languages"))))
+    .map(elem => (elem._1,(elem._2 \\ "iso_639_1").toList,(elem._3 \\ "name").toList))
+    .flatMap(x => x._3.map((x._1,x._2,_)))
+    .flatMap(x => x._2.map((x._1,_,x._3)))
+    .map(m => (m._1.toInt,m._2.toString(),m._3.toString()))
+
+
+  spokenlandata.foreach(x =>
+    sql"""
+          INSERT INTO spokenlanguagesxpeli(ID_PELI_S, ISO, NAME)
+          VALUES
+          (${x._1}, ${x._2},${x._3})
+          """.stripMargin
+      .update
+      .apply())
+*/
+
+  //Tabla ProductionContriesxPeli
+
+  val procontries = data
+    .map(elem => (elem("id"), Json.parse(elem("production_countries")), Json.parse(elem("production_countries"))))
+    .map(elem => (elem._1, (elem._2 \\ "iso_3166_1").toList, (elem._3 \\ "name").toList))
+    .flatMap(x => x._3.map((x._1, x._2, _)))
+    .flatMap(x => x._2.map((x._1, _, x._3)))
+    .map(m => (m._1.toInt, m._2.toString(), m._3.toString()))
+    .distinct
+
+
+  procontries.foreach(x =>
+    sql"""
+        INSERT INTO productioncontriesxpeli(ID_PELI_PCT, ISO, NAME)
+        VALUES
+        (${x._1}, ${x._2},${x._3})
+        """.stripMargin
+      .update
+      .apply())
+
+
+
+  /*
+  val crewData = crew
+     .map(_.get)
+     .flatMap(_.as[JsArray].value)
+     .map(_.as[JsObject])
+     .map(jsObj => (jsObj("id").as[Int], jsObj("name").as[String], jsObj("credit_id").as[String]
+       , jsObj("gender").as[Int], jsObj("job").as[String], jsObj("department").as[String]))
+     .map(m => (m._1, m._2, m._3, m._4, m._5, m._6))
+     .distinct
+     .toSet
+*/
+
+
+
+
+
 
   def escapeMysql(text: String): String = text
     .replaceAll("\\\\", "\\\\\\\\")
